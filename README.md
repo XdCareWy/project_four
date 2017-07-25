@@ -1,4 +1,4 @@
-# introduct
+# Introduct
 这个项目是在Udcity的第四个项目,也是必做项目的最后一个项目,主要让学生学会使用Jasmine进行测试驱动开发(TDD).
 # Step
 1. 克隆项目,在浏览器中直接运行即可.
