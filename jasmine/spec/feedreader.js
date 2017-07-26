@@ -27,8 +27,9 @@ $(function() {
          */
          it('all urls is exist and not null', function() {
             for (var i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].url).not.toBe(null);
+                expect(allFeeds[i].url).toBeDefined();
                 expect(allFeeds[i].url).not.toBe("");
+                expect(allFeeds[i].url).not.toBeNull();
             }
          });
 
@@ -37,7 +38,7 @@ $(function() {
          */
          it("all names is exist and not null", function() {
             for (var i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].name).not.toBe(null);
+                expect(allFeeds[i].name).toBeDefined();
                 expect(allFeeds[i].name).not.toBe("");
             }
          });
@@ -51,8 +52,8 @@ $(function() {
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
         it('The menu default status is hide', function() {
-            var $bodyClass = $('body')[0].className;
-            expect($bodyClass).toBe("menu-hidden");
+            var $bodyClass = $('body');
+            expect($bodyClass.hasClass('menu-hidden')).toBe(true);
         });
         /* TODO:
           * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
@@ -61,12 +62,12 @@ $(function() {
           */
         it('The menu status is toggle', function() {
             var menuIcon = $('.menu-icon-link');
-            var $body= $('body')[0];
+            var $body= $('body');
             menuIcon.trigger('click');
-            expect($body.className).not.toBe("menu-hidden");
+            expect($body.hasClass('menu-hidden')).toBe(false);
 
             menuIcon.trigger('click');
-            expect($body.className).toBe("menu-hidden");
+            expect($body.hasClass('menu-hidden')).toBe(true);
         })
     });
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
@@ -79,20 +80,29 @@ $(function() {
          * 和异步的 done() 函数。
          */
     describe('Initial Entries', function() {
-        var app = null;
-        beforeEach(function(done) {
-            app = {
-                loadFeed: loadFeed
-            };
-            spyOn(app, 'loadFeed');
-            app.loadFeed(1);
-            done();
-        });
-        it('loadFeed should be called', function(done) {
-            expect(app.loadFeed).toHaveBeenCalled();
-            done();
-        });
+        // var app = null;
+        // beforeEach(function(done) {
+        //     app = {
+        //         loadFeed: loadFeed
+        //     };
+        //     spyOn(app, 'loadFeed');
+        //     app.loadFeed(1, done);
+        //     done();
+        // });
+        // it('loadFeed should be called', function(done) {
+        //     expect(app.loadFeed).toHaveBeenCalled();
+        //     done();
+        // });
 
+        // it('loadFeed should be normal work', function(done) {
+        //     var $feed = $('.feed');
+        //     var childrenLen = $feed[0].children.length;
+        //     expect(childrenLen).not.toBe(0);
+        //     done();
+        // });
+        beforeEach(function(done) {
+            loadFeed(0, done);
+        });
         it('loadFeed should be normal work', function(done) {
             var $feed = $('.feed');
             var childrenLen = $feed[0].children.length;
@@ -106,18 +116,31 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+    // describe('New Feed Selection', function() {
+    //     var app = null;
+    //     beforeEach(function(done) {
+    //         app = {
+    //             loadFeed: loadFeed
+    //         };
+    //         spyOn(app, 'loadFeed');
+    //         app.loadFeed(1);
+    //         done();
+    //     });
+    //     it('content changed when loadFeed param changed', function(done) {
+    //         done();
+    //     });
+    // });
     describe('New Feed Selection', function() {
-        var app = null;
+        var one, two;
         beforeEach(function(done) {
-            app = {
-                loadFeed: loadFeed
-            };
-            spyOn(app, 'loadFeed');
-            app.loadFeed(1);
-            done();
+            one = $('.feed').find('h2')[0];
+            loadFeed(3, done);
         });
         it('content changed when loadFeed param changed', function(done) {
+            two = $('.feed').find('h2')[0];
+
+            expect(one).not.toBe(two);
             done();
         });
-    });
+    })
 }());
